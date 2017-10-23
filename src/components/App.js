@@ -1,39 +1,41 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import Container from './common/Container';
 
-import { Layout, Menu, Breadcrumb } from 'antd';
+import { Layout, Menu, Breadcrumb, Icon } from 'antd';
 const { Header, Content, Footer } = Layout;
 
 class App extends Component {
   render() {
     return (
       <Layout className="layout">
-        <Header>
-          <div className="logo" />
-          <Menu
-            theme="dark"
-            mode="horizontal"
-            defaultSelectedKeys={['2']}
-            style={{ lineHeight: '64px' }}
-          >
-            <Menu.Item key="1">nav 1</Menu.Item>
-            <Menu.Item key="2">nav 2</Menu.Item>
-            <Menu.Item key="3">nav 3</Menu.Item>
-          </Menu>
+        <Header style={{background: "#fff"}}>
+          <Container>
+            <span>Пользователь: <b>Tester</b></span>
+            <Menu
+              mode="horizontal"
+              selectable={false}
+              style={{ lineHeight: '63px', display: 'inline'}}
+            >
+              <Menu.Item style={{float: "right"}}>Выйти <Icon type="logout"/></Menu.Item>
+            </Menu>
+          </Container>
         </Header>
-        <Content style={{ padding: '0 50px' }}>
-          <Breadcrumb style={{ margin: '16px 0' }}>
-            <Breadcrumb.Item>Home</Breadcrumb.Item>
-            <Breadcrumb.Item>List</Breadcrumb.Item>
-            <Breadcrumb.Item>App</Breadcrumb.Item>
-          </Breadcrumb>
-          <div style={{ background: '#fff', padding: 24, minHeight: 280 }}>Content</div>
-        </Content>
-        <Footer style={{ textAlign: 'center' }}>
-          Ant Design ©2016 Created by Ant UED
-        </Footer>
+        <Container>
+          <Content style={{ minHeight: "calc(100vh - 130px)" }}>
+            {this.props.children}
+          </Content>
+          <Footer style={{ textAlign: 'center' }}>
+            Sergey Sarkisyan ©2017 Built with React and Ant Design
+          </Footer>
+        </Container>
       </Layout>
     );
   }
 }
+
+App.propTypes = {
+  children: PropTypes.node
+};
 
 export default App;
