@@ -1,10 +1,15 @@
 import React from 'react';
-import { Breadcrumb, Table } from 'antd';
+import { Breadcrumb, Table, notification } from 'antd';
+import CatalogApi from '../api/catalogApi';
 
 class CatalogListPage extends React.Component {
 
   constructor(props, context) {
     super(props, context);
+
+    this.state = {
+      catalogs: []
+    };
 
     this.columns = [
       {
@@ -21,13 +26,20 @@ class CatalogListPage extends React.Component {
   }
 
   componentDidMount() {
-    this.setState({catalog: []});
+    CatalogApi.getAllCatalogs()
+      .then((catalogs) => {
+        this.setState({catalogs: catalogs.data});
+      })
+      .catch((err) => {
+        notification.error({
+          message: 'Unable to load Catalog list',
+          description: err.summary || '',
+        });
+      });
   }
 
 
   render() {
-    const { catalogs } = this.props;
-
     return (
       <div>
         <Breadcrumb style={{ margin: '12px 0' }}>
@@ -36,7 +48,7 @@ class CatalogListPage extends React.Component {
 
         <div style={{ background: '#fff', padding: 24, minHeight: 280 }}>
           <Table
-            dataSource={catalogs}
+            dataSource={this.state.catalogs}
             columns={this.columns}
             rowKey="class"
             bordered
