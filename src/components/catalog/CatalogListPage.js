@@ -28,7 +28,7 @@ class CatalogListPage extends React.Component {
   componentDidMount() {
     CatalogApi.getAllCatalogs()
       .then((catalogs) => {
-        this.setState({catalogs: catalogs.data});
+        this.setState({catalogs: catalogs.data.sort(sortByName)});
       })
       .catch((err) => {
         notification.error({
