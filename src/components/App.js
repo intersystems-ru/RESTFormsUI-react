@@ -1,13 +1,17 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Container from './common/Container';
-import CatalogPage from './catalog/CatalogPage';
+
 import { Route, NavLink } from 'react-router-dom';
 import { Layout, Menu, Breadcrumb, Icon, LocaleProvider } from 'antd';
+
+const { Header, Content, Footer } = Layout;
+
 import enUS from 'antd/lib/locale-provider/en_US';
 
+import Container from './common/Container';
+import CatalogPage from './catalog/CatalogPage';
 import CatalogListPage from "./catalog/CatalogListPage";
-const { Header, Content, Footer } = Layout;
+import ManageCatalogPage from "./catalog/ManageCatalogPage";
 
 class App extends Component {
   render() {
@@ -28,8 +32,11 @@ class App extends Component {
           </Header>
           <Container>
             <Content style={{ minHeight: "calc(100vh - 130px)", padding: "20px" }}>
+
               <Route exact path={"/"} component={CatalogListPage}/>
               <Route exact path={"/catalog/:name"} component={CatalogPage}/>
+              <Route exact path={"/catalog/:name/object/:id"} component={ManageCatalogPage}/>
+
             </Content>
             <Footer style={{ textAlign: 'center' }}>
               Sergey Sarkisyan ©2017 Built with React and Ant Design
