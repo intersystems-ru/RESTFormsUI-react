@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Container from './common/Container';
+import CatalogPage from './catalog/CatalogPage';
 import { Route, NavLink } from 'react-router-dom';
 import { Layout, Menu, Breadcrumb, Icon, LocaleProvider } from 'antd';
 import enUS from 'antd/lib/locale-provider/en_US';
@@ -27,7 +28,8 @@ class App extends Component {
           </Header>
           <Container>
             <Content style={{ minHeight: "calc(100vh - 130px)", padding: "20px" }}>
-              <Route path={"/"} component={CatalogListPage}/>
+              <Route exact path={"/"} component={CatalogListPage}/>
+              <Route exact path={"/catalog/:name"} component={CatalogPage}/>
             </Content>
             <Footer style={{ textAlign: 'center' }}>
               Sergey Sarkisyan ©2017 Built with React and Ant Design

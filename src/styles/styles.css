@@ -1,0 +1,70 @@
+/* Styles */
+.clearfix {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.ant-form-item {
+  margin-bottom: 12px;
+}
+
+td.clickable-cell {
+  cursor: pointer;
+}
+
+.logo {
+  width: 62px;
+  height: 62px;
+  float: left;
+}
+
+.logo img {
+  width: 62px;
+}
+
+.header {
+  font-size: 26pt;
+}
+
+.paragraph {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  font-size: 14pt;
+  line-height: 24pt;
+}
+
+.feature-list {
+  padding-left: 10px;
+  list-style-type: disc;
+  margin-left: 30px;
+}
+
+.feature-item {
+  font-size: 12pt;
+  line-height: 26pt;
+}
+
+.feature-item__tag {
+  vertical-align: text-bottom;
+}
+
+.container {
+  margin-right: auto;
+  margin-left: auto;
+}
+@media (min-width: 768px) {
+  .container {
+    width: 750px;
+  }
+}
+@media (min-width: 992px) {
+  .container {
+    width: 970px;
+  }
+}
+@media (min-width: 1200px) {
+  .container {
+    width: 1170px;
+  }
+}

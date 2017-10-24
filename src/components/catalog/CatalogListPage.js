@@ -1,6 +1,7 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Breadcrumb, Table, notification } from 'antd';
-import CatalogApi from '../api/catalogApi';
+import CatalogApi from '../../api/catalogApi';
 
 class CatalogListPage extends React.Component {
 
@@ -19,7 +20,7 @@ class CatalogListPage extends React.Component {
         sorter: sortByName,
         className: 'clickable-cell',
         onCellClick: (record) => {
-          history.replace(`/catalog/${record.class}`);
+          this.props.history.push(`/catalog/${record.class}`);
         }
       }
     ];
@@ -74,5 +75,11 @@ function sortByName(a, b) {
 
   return 0;
 }
+
+CatalogListPage.propTypes = {
+  history: PropTypes.object,
+  match: PropTypes.object,
+  location: PropTypes.object
+};
 
 export default CatalogListPage;
