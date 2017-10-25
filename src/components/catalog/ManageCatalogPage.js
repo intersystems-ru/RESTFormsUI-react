@@ -133,7 +133,7 @@ export class ManageCatalogPage extends React.Component {
           <Breadcrumb.Item>
             <a onClick={this.goPathOnClick(`/catalog/${this.props.match.params.name}`)}>{this.state.catalog.name}</a>
           </Breadcrumb.Item>
-          <Breadcrumb.Item>{this.state.form.name || 'Создание объекта'}</Breadcrumb.Item>
+          <Breadcrumb.Item>{this.state.form.name || 'Object creating'}</Breadcrumb.Item>
         </Breadcrumb>
 
         <div style={{background: '#fff', padding: 24, minHeight: 280}}>
@@ -145,7 +145,7 @@ export class ManageCatalogPage extends React.Component {
 
           {!this.state.loading &&
           <div>
-            {!this.props.match.params.id && <h1>Создание объекта справочника '{this.state.catalog.name}'</h1>}
+            {!this.props.match.params.id && <h1>'{this.state.catalog.name}: creating new object'</h1>}
 
             {this.props.match.params.id &&
             (this.state.catalog.objpermissions.indexOf('U') !== -1) &&
