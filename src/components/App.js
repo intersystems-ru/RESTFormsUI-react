@@ -36,6 +36,7 @@ class App extends Component {
               <Route exact path={"/"} component={CatalogListPage}/>
               <Route exact path={"/catalog/:name"} component={CatalogPage}/>
               <Route exact path={"/catalog/:name/object/:id"} component={ManageCatalogPage}/>
+              <Route exact path={"/catalog/:name/object"} component={ManageCatalogPage}/>
 
             </Content>
             <Footer style={{ textAlign: 'center' }}>

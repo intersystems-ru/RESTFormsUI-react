@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Breadcrumb, Table, Button} from 'antd';
+import { Breadcrumb, Table, Button, notification } from 'antd';
 import { NavLink } from 'react-router-dom';
 import CatalogApi from '../../api/catalogApi';
 
@@ -65,10 +65,22 @@ class CatalogPage extends React.Component {
         this.setState({catalog: response.data});
         return CatalogApi.getCatalogExtent(name);
       })
+
       .then((response) => {
         this.setState({extent: response.data.children});
+      })
+
+      .catch((error) => {
+        notification.error({
+          message: 'An error has occurred: ' + error.summary
+        });
       });
   }
+
+  add = () => {
+    const path = this.props.location.pathname;
+    this.props.history.replace(`${path}/object`);
+  };
 
   edit = (record) => {
     const path = this.props.location.pathname;
@@ -93,7 +105,7 @@ class CatalogPage extends React.Component {
             <Button type="primary"
                     style={{float: 'right', marginBottom: 8}}
                     size="small"
-                    onClick={this.handleAdd}
+                    onClick={this.add}
                     className="clearfix"
             >
               Add

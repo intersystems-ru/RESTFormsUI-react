@@ -54,10 +54,18 @@ class CatalogApi {
   }
 
 
-  static saveCatalog(catalogClass, id, catalog) {
+  static updateObject(catalogClass, id, catalog) {
     return axios({
       method: 'put',
       url: `${server}/form/object/${catalogClass}/${id}`,
+      data: catalog
+    });
+  }
+
+  static saveObject(catalogClass, catalog) {
+    return axios({
+      method: 'post',
+      url: `${server}/form/object/${catalogClass}`,
       data: catalog
     });
   }

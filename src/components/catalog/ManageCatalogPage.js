@@ -15,7 +15,9 @@ export class ManageCatalogPage extends React.Component {
       catalogPath: `/catalog/${this.props.match.params.name}`,
       collections: {},
       isTouched: false,
-      form: { name: '' },
+      form: {
+        name: ''
+      },
       errors: {},
       saving: false,
       loading: true
@@ -35,11 +37,26 @@ export class ManageCatalogPage extends React.Component {
           }
         });
 
-        return CatalogApi.getFormObjectById(this.props.match.params.name, this.props.match.params.id);
+        const id = this.props.match.params.id;
+        const name = this.props.match.params.name;
+
+        if (id) {
+          return CatalogApi.getFormObjectById(name, id);
+        }
+
+        return { data: { _class: this.state.catalog.class } };
       })
 
-      .then((response) => {
-        this.setState({form: response.data, loading: false});
+      .then(({data}) => {
+        this.setState({form: data, loading: false});
+      })
+
+      .catch(({response}) => {
+        const summary = (response && response.data && response.data.summary);
+
+        notification.error({
+          message: 'An error has occurred: ' + summary
+        });
       });
   }
 
@@ -83,7 +100,17 @@ export class ManageCatalogPage extends React.Component {
 
     this.setState({ saving: true });
 
-    CatalogApi.saveCatalog(this.props.match.params.name, this.props.match.params.id, this.state.form)
+    let promise;
+    const name = this.props.match.params.name;
+    const id = this.props.match.params.id;
+
+    if (id) {
+      promise = CatalogApi.updateObject(name, id, this.state.form);
+    } else {
+      promise = CatalogApi.saveObject(name, this.state.form);
+    }
+
+    promise
       .then(() => {
         notification.success({
           message: 'Saved successfully!'
@@ -145,7 +172,7 @@ export class ManageCatalogPage extends React.Component {
 
           {!this.state.loading &&
           <div>
-            {!this.props.match.params.id && <h1>'{this.state.catalog.name}: creating new object'</h1>}
+            {!this.props.match.params.id && <h1>{this.state.catalog.name}: creating new object</h1>}
 
             {this.props.match.params.id &&
             (this.state.catalog.objpermissions.indexOf('U') !== -1) &&
