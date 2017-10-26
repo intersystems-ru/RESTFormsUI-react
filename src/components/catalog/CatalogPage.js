@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Breadcrumb, Table, Button, notification } from 'antd';
+import { Breadcrumb, Table, Button, notification, Modal } from 'antd';
 import { NavLink } from 'react-router-dom';
 import CatalogApi from '../../api/catalogApi';
 
@@ -60,22 +60,33 @@ class CatalogPage extends React.Component {
   componentDidMount() {
     const name = this.props.match.params.name;
 
-    CatalogApi.getCatalogInfo(name)
-      .then((response) => {
-        this.setState({catalog: response.data});
-        return CatalogApi.getCatalogExtent(name);
-      })
+    let promise = CatalogApi.getCatalogInfo(name);
+    promise = promise.then((response) => {
+      this.setState({catalog: response.data});
+      return this.loadCatalogExtent(name, promise);
+    });
 
-      .then((response) => {
-        this.setState({extent: response.data.children});
-      })
-
-      .catch((error) => {
-        notification.error({
-          message: 'An error has occurred: ' + error.summary
-        });
+    promise.catch((error) => {
+      notification.error({
+        message: 'An error has occurred: ' + error.summary
       });
+    });
   }
+
+  loadCatalogExtent = (name, promise) => {
+    if (promise) {
+      promise = promise.then(() => {
+        return CatalogApi.getCatalogExtent(name);
+      });
+    }
+    else {
+      promise = CatalogApi.getCatalogExtent(name);
+    }
+
+    promise = promise.then((response) => {
+      this.setState({extent: response.data.children});
+    });
+  };
 
   add = () => {
     const path = this.props.location.pathname;
@@ -88,7 +99,26 @@ class CatalogPage extends React.Component {
   };
 
   remove = (record) => {
-    console.log('Remove item:' + record);
+    Modal.confirm({
+      title: 'Do you really want to remove this object?',
+      onOk: () => {
+        CatalogApi.deleteObject(this.state.catalog.class, record._id)
+          .then(() => {
+            this.loadCatalogExtent(this.props.match.params.name);
+            notification.success({
+              message: 'Object removed successfully'
+            });
+
+          })
+
+          .catch((error) => {
+            notification.error({
+              message: 'An error has occurred: ' + error.summary
+            });
+          });
+      },
+      style: {top: '40vh'}
+    });
   };
 
   render() {

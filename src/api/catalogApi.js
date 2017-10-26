@@ -53,7 +53,6 @@ class CatalogApi {
     });
   }
 
-
   static updateObject(catalogClass, id, catalog) {
     return axios({
       method: 'put',
@@ -69,6 +68,14 @@ class CatalogApi {
       data: catalog
     });
   }
+
+  static deleteObject(catalogClass, id) {
+    return axios({
+      method: 'delete',
+      url: `${server}/form/object/${catalogClass}/${id}`
+    });
+  }
+
 }
 
 export default CatalogApi;
