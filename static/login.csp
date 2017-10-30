@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <title>Сахалинский областной медицинский информационно-аналитический центр</title>
+</head>
+<body style="background-color: #E9EDF1">
+<div id="login">
+  <div class="login__page-middle login__page-text-center" style="height: calc(100vh - 140px)">
+    <div class="login__page-login">
+
+      <form name="Login" method="post">
+        <div class="login__page-segment">
+
+          <div class="login__page-field">
+            <div style="width: 100%;">
+              <i class="user icon"></i>
+              <input class="login__page-input" type="text" placeholder="Login" name="CacheUserName">
+            </div>
+          </div>
+
+          <div class="login__page-field">
+            <div style="width: 100%;">
+              <i class="lock icon"></i>
+              <input class="login__page-input" type="password" placeholder="Password" name="CachePassword">
+            </div>
+          </div>
+
+          <button type="submit" class="login__page-button">Log in
+          </button>
+
+          #($select( ($Get(%request.Data("Error:ErrorCode",1))'="")&&($$$GETERRORCODE($Get(%request.Data("Error:ErrorCode",1)))'=$$$ERRORCODE($$$RequireAuthentication)): "<div class=""login__page-message"">The user name or password is incorrect</div>", 1:"") )#
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>
+</body>
+</html>

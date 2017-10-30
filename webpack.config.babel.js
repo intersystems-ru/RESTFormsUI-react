@@ -1,6 +1,8 @@
 import webpack from 'webpack';
 import path from 'path';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
+import CopyWebpackPlugin from 'copy-webpack-plugin';
+
 
 export default {
   stats: 'errors-only',
@@ -15,6 +17,9 @@ export default {
   plugins: [
     new webpack.optimize.OccurrenceOrderPlugin(),
     new ExtractTextPlugin('style.css'),
+    new CopyWebpackPlugin([
+      { from: 'static', to: './' }
+    ])
     //new webpack.optimize.UglifyJsPlugin()
   ],
   module: {

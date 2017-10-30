@@ -1,11 +1,11 @@
-import axios from 'axios';
+import rest from './rest';
 import { server } from "./config";
 
 class CatalogApi {
 
   // get list of all available catalogs
   static getAllCatalogs() {
-    return axios({
+    return rest({
       method: 'get',
       url: `${server}/form/info`,
       params: {
@@ -16,7 +16,7 @@ class CatalogApi {
 
   // get full metadata of specified catalog
   static getCatalogInfo(catalogClass) {
-    return axios({
+    return rest({
       method: 'get',
       url: `${server}/form/info/${catalogClass}`
     });
@@ -24,7 +24,7 @@ class CatalogApi {
 
   // get <size> objects of specified catalog
   static getCatalogExtent(catalogClass) {
-    return axios({
+    return rest({
       method: 'get',
       url: `${server}/form/objects/${catalogClass}/info`,
       params: {
@@ -35,7 +35,7 @@ class CatalogApi {
 
   // get <size> objects of specified catalog with _class property
   static getCatalogExtendWithClass(catalogClass) {
-    return axios({
+    return rest({
       method: 'get',
       url: `${server}/form/objects/${catalogClass}/infoclass`,
       params: {
@@ -47,14 +47,14 @@ class CatalogApi {
 
   // get object by catalog and id
   static getFormObjectById(catalogClass, id) {
-    return axios({
+    return rest({
       method: 'get',
       url: `${server}/form/object/${catalogClass}/${id}`
     });
   }
 
   static updateObject(catalogClass, id, catalog) {
-    return axios({
+    return rest({
       method: 'put',
       url: `${server}/form/object/${catalogClass}/${id}`,
       data: catalog
@@ -62,7 +62,7 @@ class CatalogApi {
   }
 
   static saveObject(catalogClass, catalog) {
-    return axios({
+    return rest({
       method: 'post',
       url: `${server}/form/object/${catalogClass}`,
       data: catalog
@@ -70,7 +70,7 @@ class CatalogApi {
   }
 
   static deleteObject(catalogClass, id) {
-    return axios({
+    return rest({
       method: 'delete',
       url: `${server}/form/object/${catalogClass}/${id}`
     });

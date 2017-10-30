@@ -20,13 +20,13 @@ class App extends Component {
         <Layout className="layout">
           <Header style={{background: "#fff"}}>
             <Container>
-              <span>User: <b>Tester</b></span>
+              <span>User: <b>{window.userName}</b></span>
               <Menu
                 mode="horizontal"
                 selectable={false}
                 style={{ lineHeight: '63px', display: 'inline'}}
               >
-                <Menu.Item style={{float: "right"}}>Log out <Icon type="logout"/></Menu.Item>
+                <Menu.Item style={{float: "right"}}><a href="?CacheLogout=1">Log out <Icon type="logout"/></a></Menu.Item>
               </Menu>
             </Container>
           </Header>
