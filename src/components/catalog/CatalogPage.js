@@ -26,33 +26,47 @@ class CatalogPage extends React.Component {
       {
         key: 'action',
         width: "100px",
+        className: 'text-right',
         onCellClick: (record, event) => {
           if (
-            event.target.matches('.anticon-edit') ||
-            (event.target.firstElementChild &&
-             event.target.firstElementChild.matches('.anticon-edit'))
+            (event.target.matches('#view') ||
+            (event.target.firstElementChild && event.target.firstElementChild.matches('#view'))) ||
+            (event.target.matches('#edit') ||
+            (event.target.firstElementChild && event.target.firstElementChild.matches('#edit')))
           ) {
-            this.edit(record);
-
-          } else if (
-            event.target.matches('.anticon-delete') ||
-            (event.target.firstElementChild &&
-             event.target.firstElementChild.matches('.anticon-delete'))
+            this.open(record);
+          }
+          else if (
+            event.target.matches('#delete') ||
+            (event.target.firstElementChild && event.target.firstElementChild.matches('#delete'))
           ) {
             this.remove(record);
           }
         },
         render: (text, record) => (
           <span>
-            <Button type="primary" icon="edit" style={{margin: "0 5px"}}/>
-            <Button type="danger" icon="delete" style={{margin: "0 5px"}}/>
+            {this.state.catalog.objpermissions.includes('U') &&
+              <Button type="primary" id="edit" icon="edit" style={{margin: "0 5px"}}/>
+            }
+
+            {!this.state.catalog.objpermissions.includes('U') &&
+              this.state.catalog.objpermissions.includes('R') &&
+              <Button type="primary" id="view" icon="search" style={{margin: "0 5px"}}/>
+            }
+
+            {this.state.catalog.objpermissions.includes('D') &&
+              <Button type="danger" icon="delete" style={{margin: "0 5px"}}/>
+            }
           </span>
         )
       }
     ];
 
     this.state = {
-      catalog: {},
+      catalog: {
+        name: '',
+        objpermissions: ''
+      },
       extent: []
     };
   }
@@ -60,42 +74,47 @@ class CatalogPage extends React.Component {
   componentDidMount() {
     const name = this.props.match.params.name;
 
-    let promise = CatalogApi.getCatalogInfo(name);
-    promise = promise.then((response) => {
-      this.setState({catalog: response.data});
-      return this.loadCatalogExtent(name, promise);
-    });
+    CatalogApi.getCatalogInfo(name)
+    .then((response) => {
+      this.setState((state) => ({catalog: response.data}));
 
-    promise.catch((error) => {
+      // Load catalog data only if we have permission for that
+      if (response.data.objpermissions.includes('R')) {
+        return this.loadCatalogExtent(name);
+      }
+    })
+    .catch((error) => {
+      const summary = (error && error.response && error.response.data && error.response.data.summary);
+
       notification.error({
-        message: 'An error has occurred: ' + error.summary
+        message: 'An error has occurred: ' + summary
       });
     });
   }
 
-  loadCatalogExtent = (name, promise) => {
-    if (promise) {
-      promise = promise.then(() => {
-        return CatalogApi.getCatalogExtent(name);
-      });
-    }
-    else {
-      promise = CatalogApi.getCatalogExtent(name);
-    }
+  loadCatalogExtent = (name) => {
+    return CatalogApi.getCatalogExtent(name)
+      .then((response) => {
+        this.setState({extent: response.data.children});
+      })
+      .catch((error) => {
+        const summary = (error && error.response && error.response.data && error.response.data.summary);
 
-    promise = promise.then((response) => {
-      this.setState({extent: response.data.children});
-    });
+        notification.error({
+          message: 'An error has occurred: ' + summary
+        });
+      });
+
   };
 
   add = () => {
     const path = this.props.location.pathname;
-    this.props.history.replace(`${path}/object`);
+    this.props.history.push(`${path}/object`);
   };
 
-  edit = (record) => {
+  open = (record) => {
     const path = this.props.location.pathname;
-    this.props.history.replace(`${path}/object/${record._id}`);
+    this.props.history.push(`${path}/object/${record._id}`);
   };
 
   remove = (record) => {
@@ -128,29 +147,40 @@ class CatalogPage extends React.Component {
 
         <div style={{background: '#fff', padding: 24, minHeight: 280}}>
 
-          <div className="clearfix" style={{width: "100%"}}>
+          <div className="clearfix" style={{width: "100%", marginBottom: '20px'}}>
             <h2 style={{display: "inline"}}>
               {this.state.catalog.name || '...'}
             </h2>
-            <Button type="primary"
-                    style={{float: 'right', marginBottom: 8}}
-                    size="small"
-                    onClick={this.add}
-                    className="clearfix"
-            >
-              Add
-            </Button>
+
+            {(this.state.catalog.objpermissions.includes('C')) &&
+                <Button type="primary"
+                        style={{float: 'right', marginBottom: 8}}
+                        size="small"
+                        onClick={this.add}
+                        className="clearfix"
+                >
+                  Add
+                </Button>
+            }
+
           </div>
 
-          <Table
-            rowKey="_id"
-            dataSource={this.state.extent}
-            columns={this.columns}
-            showHeader={false}
-            bordered
-            size="middle"
-            pagination={{showSizeChanger: true}}
-          />
+          {this.state.catalog.objpermissions.includes('R') &&
+            <Table
+              rowKey="_id"
+              dataSource={this.state.extent}
+              columns={this.columns}
+              showHeader={false}
+              size="middle"
+              pagination={{showSizeChanger: true}}
+            />
+          }
+
+          {this.state.catalog.name && !this.state.catalog.objpermissions.includes('R') &&
+            <div style={{textAlign: 'center', padding: '20px'}}>
+              <h3>You have no permissions to view this catalog.</h3>
+            </div>
+          }
         </div>
       </div>
     );

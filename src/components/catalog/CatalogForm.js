@@ -5,7 +5,7 @@ import GenericInput from '../common/GenericInput';
 import CatalogFormActions from './CatalogFormActions';
 
 const CatalogForm = ({ inputList, formObject, collections,
-                       onSave, onClose, onChange, saving, errors }) => {
+                       onSave, onClose, onChange, saving, errors, permissions }) => {
   inputList = inputList || [];
   return (
     <Form>
@@ -19,11 +19,12 @@ const CatalogForm = ({ inputList, formObject, collections,
                       name={input.name}
                       value={formObject[input.name]}
                       label={input.displayName}
+                      permissions={permissions}
                       onChange={onChange}/>
         );
       })}
       <CatalogFormActions
-          permissions={formObject.objpermissions}
+          permissions={permissions}
           onSave={onSave}
           onClose={onClose}
       />
@@ -39,7 +40,8 @@ CatalogForm.propTypes = {
   onClose: PropTypes.func.isRequired,
   saving: PropTypes.bool,
   errors: PropTypes.object,
-  collections: PropTypes.object
+  collections: PropTypes.object,
+  permissions: PropTypes.string
 };
 
 export default CatalogForm;

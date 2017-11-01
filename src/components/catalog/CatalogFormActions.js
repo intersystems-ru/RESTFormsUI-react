@@ -5,8 +5,8 @@ import { Button } from 'antd';
 const CatalogFormActions = ({ permissions, onClose, onSave }) => {
   return (
     <div style={{textAlign: 'right'}}>
-      <Button style={{background: '#000', color: '#fff', marginRight: '7px'}} onClick={onClose}>Закрыть</Button>
-      <Button type="primary" onClick={onSave}>Сохранить</Button>
+      <Button style={{background: '#000', color: '#fff', marginRight: '7px'}} onClick={onClose}>Close</Button>
+      {permissions.includes('U') && <Button type="primary" onClick={onSave}>Save</Button>}
     </div>
   );
 };

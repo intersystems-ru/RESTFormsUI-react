@@ -192,6 +192,7 @@ export class ManageCatalogPage extends React.Component {
               collections={this.state.collections}
               errors={this.state.errors}
               saving={this.state.saving}
+              permissions={this.state.catalog.objpermissions || ''}
             />
           </div>
           }

@@ -6,7 +6,7 @@ import moment from 'moment';
 
 const GenericInput = ({ category, collection = [], collectionType,
                         type, name, label, onChange, placeholder,
-                        value, error }) => {
+                        value, error, permissions }) => {
 
   function onChangeDate(name) {
     return function(date, dateString) {
@@ -64,27 +64,53 @@ const GenericInput = ({ category, collection = [], collectionType,
 
   switch (type) {
     case '%Library.String':
-      input = <Input value={value} onChange={onChangeString(name)} name={name}/>;
+      if (permissions.includes('U')) {
+        input = <Input value={value} onChange={onChangeString(name)} name={name}/>;
+      }
+      else {
+        input = <Input value={value} readOnly name={name}/>;
+      }
       break;
     case '%Library.Boolean':
-      input = <Checkbox checked={value} onChange={onChangeBoolean(name)} name={name}>{label}</Checkbox>;
+      if (permissions.includes('U')) {
+        input = <Checkbox checked={value} onChange={onChangeBoolean(name)} name={name}>{label}</Checkbox>;
+      }
+      else {
+        input = <Checkbox checked={value} readOnly name={name}>{label}</Checkbox>;
+      }
       break;
     case '%Library.Date':
-      input = (<DatePicker format={dateFormat} value={getMomentValue(value, dateFormat)}
-                          name={name} onChange={onChangeDate(name)}/>);
+      if (permissions.includes('U')) {
+        input = (<DatePicker format={dateFormat} value={getMomentValue(value, dateFormat)}
+                             name={name} onChange={onChangeDate(name)}/>);
+      }
+      else {
+        input = <Input value={value} name={name} readOnly style={{ width: '200px' }}/>;
+      }
       break;
     case '%Library.TimeStamp':
-      input = (<DatePicker format={datetimeFormat} value={getMomentValue(value, moment.ISO_8601)}
-                           showTime name={name} onChange={onChangeTimestamp(name)}/>);
+      if (permissions.includes('U')) {
+        input = (<DatePicker format={datetimeFormat} value={getMomentValue(value, moment.ISO_8601)}
+                             showTime name={name} onChange={onChangeTimestamp(name)}/>);
+      }
+      else {
+        input = <Input value={getMomentValue(value, moment.ISO_8601)} name={name} readOnly style={{ width: '200px' }}/>;
+      }
       break;
     case '%Library.Integer':
     case '%Library.Numeric':
-      input = <InputNumber name={name} value={value} onChange={onChangeNumber(name)}/>;
+      if (permissions.includes('U')) {
+        input = <InputNumber name={name} value={value} onChange={onChangeNumber(name)}/>;
+      }
+      else {
+        input = <Input value={value} name={name} readOnly style={{ width: '200px' }}/>;
+      }
       break;
     default:
       if (category === 'form') {
 
         if (!collectionType) {
+          if (permissions.includes('U')) {
             let options = collection.map(item => {
               return <Select.Option key={item._id} value={item._id}>{item.displayName}</Select.Option>;
             });
@@ -95,7 +121,7 @@ const GenericInput = ({ category, collection = [], collectionType,
             }
 
             input = (
-              <Select showSearch style={{ width: 200 }}
+              <Select showSearch style={{width: 200}}
                       value={value}
                       name={name}
                       optionFilterProp="children"
@@ -104,6 +130,10 @@ const GenericInput = ({ category, collection = [], collectionType,
                 {options}
               </Select>
             );
+          }
+          else {
+            input = <Input name={name} value={value.name} readOnly style={{ width: '200px' }}/>;
+          }
         }
 
       }
@@ -135,6 +165,7 @@ GenericInput.propTypes = {
   label: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   placeholder: PropTypes.string,
+  permissions: PropTypes.string,
   value: PropTypes.any,
   error: PropTypes.string
 };
