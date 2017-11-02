@@ -16,11 +16,16 @@ export default {
   },
   plugins: [
     new webpack.optimize.OccurrenceOrderPlugin(),
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: JSON.stringify('production')
+      }
+    }),
     new ExtractTextPlugin('style.css'),
     new CopyWebpackPlugin([
       { from: 'static', to: './' }
-    ])
-    //new webpack.optimize.UglifyJsPlugin()
+    ]),
+    new webpack.optimize.UglifyJsPlugin()
   ],
   module: {
     rules: [
