@@ -10,9 +10,16 @@ The License will be added as soon as project migrated to React 16 and Antd 3+.
 ## How to build
 
 1. Pull the repository and navigate to the repository folder
-2. Open a local terminal or command line and execute `npm install`
-3. After that execute `npm run build`
+2. Open `src/api/config.js` and change server line to address of your rest application.
+3. Open a local terminal or command line and execute next commands:
+```
+npm install
+npm run build
+```
 
 The production files will be placed in `dist` folder. Copy it to your CSP-application folder and use as general CSP-app.
+
+**For authentication**
+Use built `login.csp` page as custom Caché Login Page for your application. Set cookies path to the same value for both rest and client app. 
 
 **README will be updated**
