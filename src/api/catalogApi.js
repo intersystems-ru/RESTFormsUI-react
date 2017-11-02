@@ -1,5 +1,5 @@
 import rest from './rest';
-import { server } from "./config";
+const server = window.__INITIAL_STATE__.config.server;
 
 class CatalogApi {
 

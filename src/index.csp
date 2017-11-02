@@ -8,6 +8,15 @@
   <title>Сахалинский областной медицинский информационно-аналитический центр</title>
 
   <script>
+    var initialState = {
+      config: {
+        // should be changed to actual path of rest application
+        server: 'http://localhost:57773/sah/rest'
+      },
+    };
+    window.__INITIAL_STATE__ = initialState;
+
+
     var cspSessionTimeout = (+'#(%session.AppTimeout)#' + 15) * 1000;
     var cspSessionTimer;
     var userName = ('#(%session.Username)#');

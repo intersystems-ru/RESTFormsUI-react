@@ -10,7 +10,7 @@ In future project will migrate to React 16 and Antd 3+.
 ## How to build
 
 1. Pull the repository and navigate to the repository folder
-2. Open `src/api/config.js` and change server line to address of your rest application.
+2. Open `index.csp` and change server line to address of your rest application.
 3. Open a local terminal or command line and execute next commands:
 ```
 npm install
