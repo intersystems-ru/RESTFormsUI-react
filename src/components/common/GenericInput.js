@@ -5,8 +5,8 @@ import moment from 'moment';
 
 
 const GenericInput = ({ category, collection = [], collectionType,
-                        type, name, label, onChange, placeholder,
-                        value, error, permissions }) => {
+                        datatype, name, label, onChange, placeholder,
+                        value, error, readOnly }) => {
 
   function onChangeDate(name) {
     return function(date, dateString) {
@@ -36,7 +36,7 @@ const GenericInput = ({ category, collection = [], collectionType,
 
   function onChangeSelect(name) {
     return function(value) {
-      onChange(name, { _id: value, _class: type });
+      onChange(name, { _id: value, _class: datatype });
     };
   }
 
@@ -62,55 +62,58 @@ const GenericInput = ({ category, collection = [], collectionType,
   const dateFormat = 'YYYY-MM-DD';
   const datetimeFormat = 'YYYY-MM-DD HH:mm:ss';
 
-  switch (type) {
+  switch (datatype) {
     case '%Library.String':
-      if (permissions.includes('U')) {
-        input = <Input value={value} onChange={onChangeString(name)} name={name}/>;
+      if (readOnly) {
+        input = <Input value={value} readOnly name={name}/>;
       }
       else {
-        input = <Input value={value} readOnly name={name}/>;
+        input = <Input value={value} onChange={onChangeString(name)} name={name}/>;
       }
       break;
     case '%Library.Boolean':
-      if (permissions.includes('U')) {
-        input = <Checkbox checked={value} onChange={onChangeBoolean(name)} name={name}>{label}</Checkbox>;
+      if (readOnly) {
+        input = <Checkbox checked={value} readOnly name={name}>{label}</Checkbox>;
       }
       else {
-        input = <Checkbox checked={value} readOnly name={name}>{label}</Checkbox>;
+        input = <Checkbox checked={value} onChange={onChangeBoolean(name)} name={name}>{label}</Checkbox>;
       }
       break;
     case '%Library.Date':
-      if (permissions.includes('U')) {
+      if (readOnly) {
+        input = <Input value={value} name={name} readOnly style={{ width: '200px' }}/>;
+      }
+      else {
         input = (<DatePicker format={dateFormat} value={getMomentValue(value, dateFormat)}
                              name={name} onChange={onChangeDate(name)}/>);
       }
-      else {
-        input = <Input value={value} name={name} readOnly style={{ width: '200px' }}/>;
-      }
       break;
     case '%Library.TimeStamp':
-      if (permissions.includes('U')) {
-        input = (<DatePicker format={datetimeFormat} value={getMomentValue(value, moment.ISO_8601)}
-                             showTime name={name} onChange={onChangeTimestamp(name)}/>);
+      if (readOnly) {
+        input = <Input value={getMomentValue(value, moment.ISO_8601)} name={name} readOnly style={{ width: '200px' }}/>;
       }
       else {
-        input = <Input value={getMomentValue(value, moment.ISO_8601)} name={name} readOnly style={{ width: '200px' }}/>;
+        input = (<DatePicker format={datetimeFormat} value={getMomentValue(value, moment.ISO_8601)}
+                             showTime name={name} onChange={onChangeTimestamp(name)}/>);
       }
       break;
     case '%Library.Integer':
     case '%Library.Numeric':
-      if (permissions.includes('U')) {
-        input = <InputNumber name={name} value={value} onChange={onChangeNumber(name)}/>;
+      if (readOnly) {
+        input = <Input value={value} name={name} readOnly style={{ width: '200px' }}/>;
       }
       else {
-        input = <Input value={value} name={name} readOnly style={{ width: '200px' }}/>;
+        input = <InputNumber name={name} value={value} onChange={onChangeNumber(name)}/>;
       }
       break;
     default:
       if (category === 'form') {
 
         if (!collectionType) {
-          if (permissions.includes('U')) {
+          if (readOnly) {
+            input = <Input name={name} value={value.name} readOnly style={{ width: '200px' }}/>;
+          }
+          else {
             let options = collection.map(item => {
               return <Select.Option key={item._id} value={item._id}>{item.displayName}</Select.Option>;
             });
@@ -131,9 +134,6 @@ const GenericInput = ({ category, collection = [], collectionType,
               </Select>
             );
           }
-          else {
-            input = <Input name={name} value={value.name} readOnly style={{ width: '200px' }}/>;
-          }
         }
 
       }
@@ -141,7 +141,7 @@ const GenericInput = ({ category, collection = [], collectionType,
   }
 
   if (input) {
-    if (type !== '%Library.Boolean') {
+    if (datatype !== '%Library.Boolean') {
       return (
         <Form.Item label={label}>
           {input}
@@ -157,7 +157,7 @@ const GenericInput = ({ category, collection = [], collectionType,
 };
 
 GenericInput.propTypes = {
-  type: PropTypes.string.isRequired,
+  datatype: PropTypes.string.isRequired,
   category: PropTypes.string.isRequired,
   collectionType: PropTypes.string.isRequired,
   collection: PropTypes.array,
@@ -165,7 +165,7 @@ GenericInput.propTypes = {
   label: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   placeholder: PropTypes.string,
-  permissions: PropTypes.string,
+  readOnly: PropTypes.bool,
   value: PropTypes.any,
   error: PropTypes.string
 };

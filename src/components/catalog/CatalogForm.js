@@ -12,14 +12,14 @@ const CatalogForm = ({ inputList, formObject, collections,
       {inputList.map((input, index) => {
         return (
           <GenericInput key={index}
-                      type={input.type}
+                      datatype={input.type}
                       category={input.category}
                       collectionType={input.collection}
                       collection={collections[input.type]}
                       name={input.name}
                       value={formObject[input.name]}
                       label={input.displayName}
-                      permissions={permissions}
+                      readOnly={!permissions.includes('U')}
                       onChange={onChange}/>
         );
       })}

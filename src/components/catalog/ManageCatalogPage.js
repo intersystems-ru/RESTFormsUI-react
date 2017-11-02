@@ -70,7 +70,6 @@ export class ManageCatalogPage extends React.Component {
   };
 
   updateCatalogState = (field, value) => {
-    console.log(field, value);
     let form = this.state.form;
     form[field] = value;
     return this.setState({ form, isTouched: true });
