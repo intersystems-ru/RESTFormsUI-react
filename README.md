@@ -3,7 +3,7 @@
 This project is implementation of RESTForms UI built with React.
 It also uses [Antd](https://ant.design/) as main UI library.
 
-The License will be added as soon as project migrated to React 16 and Antd 3+.
+In future project will migrate to React 16 and Antd 3+.
 
 **To build this project you need Node 6+ installed. Or you can grab latest stable version from Releases tab.**
 
