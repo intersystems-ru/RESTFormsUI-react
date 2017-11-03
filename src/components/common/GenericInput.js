@@ -111,7 +111,8 @@ const GenericInput = ({ category, collection = [], collectionType,
 
         if (!collectionType) {
           if (readOnly) {
-            input = <Input name={name} value={value.name} readOnly style={{ width: '200px' }}/>;
+            let displayValue = (value && value.name);
+            input = <Input name={name} value={displayValue} readOnly style={{ width: '200px' }}/>;
           }
           else {
             let options = collection.map(item => {

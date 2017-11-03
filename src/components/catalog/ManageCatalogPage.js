@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { NavLink } from 'react-router-dom';
 import CatalogForm from '../../../../react2/src/components/catalog/CatalogForm';
 import CatalogApi from '../../api/catalogApi';
 import { Breadcrumb, Spin, notification, Modal } from 'antd';
@@ -24,8 +23,23 @@ export class ManageCatalogPage extends React.Component {
     };
   }
 
-  componentWillMount() {
-    CatalogApi.getCatalogInfo(this.props.match.params.name)
+  componentDidMount() {
+    const id = this.props.match.params.id;
+    const name = this.props.match.params.name;
+
+    this.fetchCatalogData(name, id);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const nextId = nextProps.match.params.id;
+    if (nextId === this.props.match.params.id) return;
+
+    const name = this.props.match.params.name;
+    this.fetchCatalogData(name, nextId);
+  }
+
+  fetchCatalogData = (name, id) => {
+    CatalogApi.getCatalogInfo(name)
       .then((response) => {
         this.setState({catalog: response.data});
 
@@ -36,9 +50,6 @@ export class ManageCatalogPage extends React.Component {
             collectionPromises.push(this.loadCollection(field.type));
           }
         });
-
-        const id = this.props.match.params.id;
-        const name = this.props.match.params.name;
 
         if (id) {
           return CatalogApi.getFormObjectById(name, id);
@@ -58,7 +69,7 @@ export class ManageCatalogPage extends React.Component {
           message: 'An error has occurred: ' + summary
         });
       });
-  }
+  };
 
   loadCollection = (catalogClass) => {
     return CatalogApi.getCatalogExtendWithClass(catalogClass)
@@ -80,10 +91,8 @@ export class ManageCatalogPage extends React.Component {
     let errors = {};
 
     /*
-    if (this.state.form.title.length < 5) {
-      errors.title = 'Title must be at least 5 characters.';
-      formIsValid = false;
-    }*/
+    Put validation logic here
+    */
 
     this.setState({ errors });
     return formIsValid;
