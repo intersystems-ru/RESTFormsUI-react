@@ -46,7 +46,7 @@ class CatalogPage extends React.Component {
         render: (text, record) => (
           <span>
             {this.state.catalog.objpermissions.includes('U') &&
-              <Button type="primary" id="edit" icon="edit" style={{margin: "0 5px"}}/>
+              <Button type="primary" id="edit" icon="editnpm -v" style={{margin: "0 5px"}}/>
             }
 
             {!this.state.catalog.objpermissions.includes('U') &&

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import CatalogForm from '../../../../react2/src/components/catalog/CatalogForm';
+import CatalogForm from './CatalogForm';
 import CatalogApi from '../../api/catalogApi';
 import { Breadcrumb, Spin, notification, Modal } from 'antd';
 
