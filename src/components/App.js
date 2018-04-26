@@ -40,7 +40,7 @@ class App extends Component {
 
             </Content>
             <Footer style={{ textAlign: 'center' }}>
-              Sergey Sarkisyan ©2017 Built with React and Ant Design
+              Built with React and Ant Design
             </Footer>
           </Container>
         </Layout>

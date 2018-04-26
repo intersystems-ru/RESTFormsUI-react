@@ -11,7 +11,7 @@
     var initialState = {
       config: {
         // should be changed to actual path of rest application
-        server: 'http://localhost:57773/sah/rest'
+        server: 'http://localhost:57773/api/restforms'
       },
     };
     window.__INITIAL_STATE__ = initialState;

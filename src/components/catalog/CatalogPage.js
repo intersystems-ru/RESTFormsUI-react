@@ -55,7 +55,7 @@ class CatalogPage extends React.Component {
             }
 
             {this.state.catalog.objpermissions.includes('D') &&
-              <Button type="danger" icon="delete" style={{margin: "0 5px"}}/>
+              <Button type="danger" id="delete" icon="delete" style={{margin: "0 5px"}}/>
             }
           </span>
         )
@@ -131,8 +131,10 @@ class CatalogPage extends React.Component {
           })
 
           .catch((error) => {
+            const summary = (error && error.response && error.response.data && error.response.data.summary);
+
             notification.error({
-              message: 'An error has occurred: ' + error.summary
+              message: 'An error has occurred: ' + summary
             });
           });
       },
